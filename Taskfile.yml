@@ -1,0 +1,33 @@
+# https://taskfile.dev
+
+version: '3'
+
+tasks:
+  test:
+    cmds:
+      - poetry run pytest
+      - |
+        if [[ -f ./coverage.svg ]]; then
+            rm ./coverage.svg
+        fi
+      - poetry run coverage-badge -o coverage.svg
+    silent: true
+
+  lint:
+    cmds:
+      - poetry run ruff minnesota
+      - poetry run pylint minnesota
+      - poetry run mypy minnesota
+      - poetry run interrogate
+      - poetry run bandit -c pyproject.toml -r ./minnesota
+    silent: true
+
+  docs:
+    cmds:
+      - poetry run pdoc ./minnesota/ -d google -o docs
+    silent: true
+
+  install:
+    cmds:
+      - poetry install
+    silent: true

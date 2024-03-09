@@ -1,0 +1,154 @@
+[tool.poetry]
+name = "minnesota"
+version = "0.1.0"
+description = ""
+authors = ["Fred Pirani <freonius@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+fastapi = "^0.110.0"
+pydantic = "^2.6.3"
+boto3 = "^1.34.59"
+python-multipart = "^0.0.9"
+uvicorn = "^0.28.0"
+stripe = "^8.6.0"
+
+[tool.poetry.group.dev.dependencies]
+boto3-type-annotations = "^0.3.1"
+ruff = "^0.2.2"
+pylint = "^3.0.3"
+mypy = "^1.8.0"
+bandit = "^1.7.7"
+pytest = "^8.0.1"
+pytest-cov = "^4.1.0"
+interrogate = "^1.5.0"
+pdoc = "^14.4.0"
+coverage-badge = "^1.1.0"
+black = "^24.2.0"
+moto = { extras = [
+    "cognito-idp",
+    "dynamodb",
+    "iam",
+    "lambda",
+    "logs",
+    "s3",
+], version = "^5.0.2" }
+httpx = "^0.26.0"
+python-jose = "^3.3.0"
+joserfc = "^0.9.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+# Pytest
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+addopts = "--cov=./minnesota/ --cov-report=xml:./coverage/report.xml --cov-report=html:./coverage/report"
+testpaths = ["tests"]
+
+# Documentation
+
+[tool.interrogate]
+ignore-init-method = true
+ignore-init-module = false
+ignore-magic = true
+ignore-semiprivate = true
+ignore-private = true
+ignore-property-decorators = false
+ignore-module = false
+ignore-nested-functions = false
+ignore-nested-classes = true
+ignore-setters = false
+fail-under = 90
+exclude = ["setup.py", "docs", "build", "tests"]
+ignore-regex = ["^get$", "^mock_.*", ".*BaseClass.*"]
+verbose = 1
+quiet = false
+whitelist-regex = []
+color = true
+omit-covered-files = false
+generate-badge = "./"
+badge-style = "for-the-badge"
+badge-format = "svg"
+
+# Linting
+
+[tool.pylint]
+ignore = ["tests"]
+ignore-paths = []
+disable = [
+    "consider-iterating-dictionary",
+    "too-many-branches",
+    "too-many-statements",
+    "logging-fstring-interpolation",
+    "duplicate-code",
+]
+ignore-patterns = ["test_.*"]
+fail-under = 9
+
+[tool.mypy]
+exclude = ["tests/.*\\.py"]
+warn_return_any = true
+warn_unused_configs = true
+no_implicit_optional = true
+disallow_untyped_defs = true
+disallow_untyped_calls = true
+strict = true
+warn_unreachable = true
+warn_no_return = true
+warn_unused_ignores = true
+# disable_error_code = ["valid-type"]
+
+[[tool.mypy.overrides]]
+ignore_missing_imports = true
+module = ["boto3_type_annotations.*", "boto3.*", "botocore.*"]
+
+[tool.ruff]
+select = [
+    "E",
+    "F",
+    "B",
+    "PL",
+    "D101",
+    "D103",
+    "D102",
+    "D100",
+    "D104",
+    "D105",
+    "D106",
+    "D107",
+    "C",
+]
+unfixable = ["B"]
+exclude = [
+    ".bzr",
+    ".direnv",
+    ".eggs",
+    ".git",
+    ".git-rewrite",
+    ".hg",
+    ".mypy_cache",
+    ".nox",
+    ".pants.d",
+    ".pytype",
+    ".ruff_cache",
+    ".svn",
+    ".tox",
+    ".venv",
+    "__pypackages__",
+    "_build",
+    "buck-out",
+    "build",
+    "dist",
+    "node_modules",
+    "venv",
+    "tests",
+    "*.pyi",
+]
+line-length = 100
+[tool.ruff.per-file-ignores]
+"__init__.py" = ["F401"]
